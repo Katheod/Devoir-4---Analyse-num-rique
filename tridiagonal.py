@@ -2,7 +2,7 @@ import numpy as np
 
 def tridiagonal(D, I, S, b):
     """
-    Résoudre la matrice tridiagonale Ax = b avec l'algorith de Thomas.
+    Résoudre la matrice tridiagonale Ax = b avec l'algorithme de Thomas.
     url = https://gist.github.com/vuddameri/75212bfab7d98a9c75861243a9f8f272
     
     Arguments:
