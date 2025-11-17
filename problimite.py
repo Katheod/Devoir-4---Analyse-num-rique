@@ -1,51 +1,53 @@
 from tridiagonal import tridiagonal
 
 def problimite(h, P, Q, R, a, b, alpha, beta):
-    """Solve the boundary value problem using the finite difference method.
-    Parameters:
+    """Résoudre les problèmes à valeurs aux limites avec la méthode des différences finies.
+    Arguements:
     h : float
-        Step size for the finite difference method.
-    P : function
-        Coefficient function P(x).
-    Q : function
-        Coefficient function Q(x).
-    R : function
-        Coefficient function R(x).
+    P : Vecteur
+        contient les évaluations de la fonctions p aux noeuds xi.
+    Q : Vecteur
+        contient les évaluations de la fonctions q aux noeuds xi.
+    R : Vecteur
+        contient les évaluations de la fonctions r aux noeuds xi.
     a : scalaire
-        Left boundary of the interval.
+        limite de l'invertalle gauche.
     b : scalaire
-        Right boundary of the interval.
+        limite de l'intervalle droit.
     alpha : scalaire
-        Boundary condition at x = a (y(a) = alpha).
+        Condition aux limites en x = a (y(a) = alpha).
     beta : scalaire
-        Boundary condition at x = b (y(b) = beta).
+        Condition aux limites en x = b (y(b) = beta).
     Returns:
     y : vecteur
         La solution approchée du problème aux limites.
     """
+    # n = n+1
+    N = int((b - a) / h) - 1
+    I = [0] * N
+    D = [0] * N
+    S = [0] * N
+    B = [0] * N
 
-    n = int((b - a) / h) - 1
-    I = [0] * (n - 1)
-    D = [0] * (n - 1)
-    S = [0] * (n - 1)
-    b = [0] * (n - 1)
-
-    for i in range(1, n):
+    # n équivaut à n-1 dans ce cas car range(1,n) donne n éléments de 1 à n-1
+    for i in range(1, N):
         x_i = a + i * h
-        I[i - 1] = -1 - P(x_i)*(h / 2)
-        D[i - 1] = 2 + Q(x_i)*(h ** 2)
-        S[i - 1] = -1 - P(x_i)*(h / 2)
-        b[i - 1] = -R(x_i)*(h ** 2)
+        if i == 1:
+            I[i] = 0
+            D[i] = 2 + Q(x_i)*(h ** 2)
+            S[i] = -1 - P(x_i)*(h / 2)
+            B[i] =  -R(x_i)*(h**2) + (1 + P(x_i)*(h/2))* alpha
+        elif i == N-1:
+            S[i] = 0
+            I[i] = -1 - P(x_i)*(h / 2)
+            D[i] = 2 + Q(x_i)*(h ** 2)
+            B[i] = -R(x_i)*(h**2) + (1 - P(x_i)*(h/2)) * beta
+        else:
+            I[i] = -1 - P(x_i)*(h / 2)
+            D[i] = 2 + Q(x_i)*(h ** 2)
+            S[i] = -1 - P(x_i)*(h / 2)
+            B[i] = -R(x_i)*(h ** 2)
 
-    
-    # Adjust the first equation for boundary condition at a
-    x_i = a + 0*h
-    b[0] =  -R(x_i) + (1 + P(x_i)*(h/2))* alpha
-    I[0] = 0
-
-    # Adjust the last equation for boundary condition at b
-    x_i = a + n*h
-    b[-1] = -R(x_i) + (1 + P(x_i)*(h/2)) * beta
-    S[-1] = 0
-
-    return tridiagonal(D, I, S, b)
+    Y = alpha + tridiagonal(D[1:N], I[1:N], S[1:N], B[1:N]) + beta
+    # Trouver le vecteur y en résolvant le système tridiagonal
+    return Y
