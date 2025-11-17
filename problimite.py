@@ -11,17 +11,17 @@ def problimite(h, P, Q, R, a, b, alpha, beta):
         Coefficient function Q(x).
     R : function
         Coefficient function R(x).
-    a : float
+    a : scalaire
         Left boundary of the interval.
-    b : float
+    b : scalaire
         Right boundary of the interval.
-    alpha : float
+    alpha : scalaire
         Boundary condition at x = a (y(a) = alpha).
-    beta : float
+    beta : scalaire
         Boundary condition at x = b (y(b) = beta).
     Returns:
-    list
-        Approximate solution values at the internal grid points.
+    y : vecteur
+        La solution approchée du problème aux limites.
     """
 
     n = int((b - a) / h) - 1
