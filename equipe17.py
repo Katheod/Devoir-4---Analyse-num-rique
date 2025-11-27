@@ -58,7 +58,6 @@ plt.grid(True)
 plt.figure()
 
 # ordre de convergence
-
 h_valeurs = [1e-2, 1e-3, 1e-4, 1e-5]
 erreurs = []
 
@@ -80,7 +79,6 @@ for h in h_valeurs:
 erreurs = np.array(erreurs)
 h_valeurs = np.array(h_valeurs)
 
-print(np.polyfit(np.log(h_valeurs), np.log(erreurs), 2))
 plt.loglog(h_valeurs, erreurs, 'bo-', label="E(h)")
 plt.xlabel('h')
 plt.ylabel('Erreur')
